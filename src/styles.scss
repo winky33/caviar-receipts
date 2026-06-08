@@ -1,0 +1,50 @@
+:root {
+  --ink: #222222;
+  --muted-ink: #6a5850;
+  --accent-deep: #9c5369;
+  --shell: #fff6f1;
+  --shell-shadow: #f1ddd2;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  color: var(--ink);
+  font-family: 'Patrick Hand', 'Segoe Print', monospace;
+  background:
+    radial-gradient(circle at top, rgba(255, 221, 230, 0.9), transparent 32%),
+    radial-gradient(circle at 20% 20%, rgba(255, 244, 229, 0.8), transparent 22%),
+    linear-gradient(180deg, var(--shell) 0%, #f8efe7 52%, var(--shell-shadow) 100%);
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.25) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.25) 1px, transparent 1px);
+  background-size: 28px 28px;
+  opacity: 0.35;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+img {
+  max-width: 100%;
+}

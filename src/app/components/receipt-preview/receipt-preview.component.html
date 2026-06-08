@@ -1,0 +1,40 @@
+<article class="receipt-paper" data-testid="receipt-preview" aria-label="Receipt preview">
+  <img class="receipt-paper__logo" src="assets/images/logo.jpeg" alt="Caviar Nail Gallery logo"/>
+
+  <p class="receipt-paper__brand">Caviar Nail Gallery</p>
+  <p class="receipt-paper__title">[ Receipt 收據 ]</p>
+
+  <div class="receipt-paper__meta">
+    <span>{{ receiptData().dateTime }}</span>
+    <span>{{ receiptData().receiptNo }}</span>
+  </div>
+
+  <div class="receipt-paper__divider"></div>
+
+  <div class="receipt-paper__table-header">
+    <span>Item(品名)</span>
+    <span>Qty(数量)</span>
+  </div>
+
+  <div class="receipt-paper__items">
+    @for (item of receiptData().items; track item.name + $index) {
+      <div class="receipt-paper__item">
+        <span><img src="assets/images/bullet.jpeg" alt="Caviar Nail Gallery logo" width="20" height="10"/> {{ item.name }}</span>
+        <span>{{ item.qty }}</span>
+      </div>
+    }
+  </div>
+
+  <div class="receipt-paper__divider"></div>
+
+  <div class="receipt-paper__qr">
+    <img src="assets/images/insta.jpeg" alt="Instagram QR" />
+    <p>@caviarnailgallery</p>
+  </div>
+
+  <div class="receipt-paper__footer">
+    @for (line of footerLines(); track line + $index) {
+      <p>{{ line }}</p>
+    }
+  </div>
+</article>

@@ -1,0 +1,51 @@
+<form class="receipt-form" [formGroup]="form()" novalidate>
+  <section class="receipt-form__card">
+    <div class="receipt-form__topbar">
+      <div>
+        <p class="receipt-form__eyebrow">Form Studio</p>
+        <h2>Receipt Details</h2>
+      </div>
+
+      <button type="button" class="button button--primary" (click)="requestDownload()" data-testid="download-png">
+        Download PNG
+      </button>
+    </div>
+
+    <div class="receipt-form__grid">
+      <label class="field field--wide">
+        <span>Receipt Number</span>
+        <input type="text" formControlName="receiptNo" maxlength="20" data-testid="receipt-no" />
+      </label>
+
+      <label class="field">
+        <span>Date</span>
+        <input type="date" formControlName="date" data-testid="receipt-date" />
+      </label>
+
+      <label class="field">
+        <span>Time</span>
+        <input type="time" formControlName="time" data-testid="receipt-time" />
+      </label>
+    </div>
+
+    <section class="receipt-form__section">
+      <div class="receipt-form__section-header">
+        <div>
+          <p class="receipt-form__eyebrow">Line Items</p>
+          <h3>Services</h3>
+        </div>
+
+        <button type="button" class="button button--secondary" (click)="requestAddItem()" data-testid="add-item">
+          Add Item
+        </button>
+      </div>
+
+      <app-receipt-item-table [itemGroups]="itemGroups()" (removeItem)="requestRemoveItem($event)" />
+    </section>
+
+    <label class="field">
+      <span>Footer Message</span>
+      <textarea rows="6" formControlName="footerMessage" data-testid="footer-message"></textarea>
+    </label>
+  </section>
+</form>

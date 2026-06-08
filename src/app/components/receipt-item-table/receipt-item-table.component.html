@@ -1,0 +1,25 @@
+<div class="item-table">
+  @for (itemGroup of itemGroups(); track $index) {
+    <div class="item-row" [formGroup]="itemGroup" data-testid="item-row">
+      <label class="item-field">
+        <span>Item Name</span>
+        <input type="text" formControlName="name" maxlength="100" placeholder="Anime Nail" data-testid="item-name" />
+      </label>
+
+      <label class="item-field item-field--qty">
+        <span>Qty</span>
+        <input type="number" formControlName="qty" min="1" data-testid="item-qty" />
+      </label>
+
+      <button
+        type="button"
+        class="remove-button"
+        (click)="requestRemoveItem($index)"
+        [disabled]="itemGroups().length === 1"
+        data-testid="remove-item"
+      >
+        Remove
+      </button>
+    </div>
+  }
+</div>

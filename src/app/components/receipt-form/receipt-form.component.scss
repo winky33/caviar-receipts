@@ -1,0 +1,126 @@
+.receipt-form {
+  display: block;
+}
+
+.receipt-form__card {
+  display: grid;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  border: 1px solid rgba(57, 41, 32, 0.12);
+  border-radius: 2rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(254, 249, 245, 0.96)),
+    linear-gradient(135deg, rgba(255, 214, 221, 0.24), rgba(255, 255, 255, 0));
+  box-shadow: 0 24px 48px rgba(105, 74, 54, 0.12);
+}
+
+.receipt-form__topbar,
+.receipt-form__section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.receipt-form__eyebrow {
+  margin: 0;
+  color: var(--accent-deep);
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+h2,
+h3 {
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+.receipt-form__grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.receipt-form__section {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.field {
+  display: grid;
+  gap: 0.45rem;
+  color: var(--muted-ink);
+}
+
+.field span {
+  color: var(--ink);
+  font-size: 1rem;
+}
+
+.field input,
+.field textarea {
+  width: 100%;
+  border: 1px solid rgba(57, 41, 32, 0.16);
+  border-radius: 1rem;
+  padding: 0.8rem 0.95rem;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--ink);
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.field textarea {
+  min-height: 9rem;
+  resize: vertical;
+}
+
+.field input:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: rgba(209, 94, 121, 0.6);
+  box-shadow: 0 0 0 3px rgba(255, 204, 214, 0.6);
+}
+
+.button {
+  border: 0;
+  border-radius: 999px;
+  padding: 0.7rem 1.1rem;
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
+}
+
+.button:hover {
+  transform: translateY(-1px);
+}
+
+.button--primary {
+  background: linear-gradient(135deg, #1f1a17, #654e42);
+  color: #fff7f3;
+  box-shadow: 0 10px 20px rgba(57, 41, 32, 0.18);
+}
+
+.button--secondary {
+  background: #ffe4ea;
+  color: #7d3f51;
+}
+
+@media (min-width: 680px) {
+  .receipt-form__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .field--wide {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 560px) {
+  .receipt-form__topbar,
+  .receipt-form__section-header {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .button {
+    width: 100%;
+  }
+}

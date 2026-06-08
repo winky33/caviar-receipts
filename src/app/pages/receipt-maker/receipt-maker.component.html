@@ -1,0 +1,31 @@
+<main class="receipt-maker">
+  <section class="hero">
+    <p class="eyebrow">Caviar Nail Gallery</p>
+    <h1>Receipt Image Maker</h1>
+    <p class="lede">
+      Build cute, printable salon receipts with live preview and one-tap PNG export.
+    </p>
+  </section>
+
+  <section class="workspace">
+    <app-receipt-form
+      [form]="form"
+      (addItem)="handleAddItem()"
+      (removeItem)="handleRemoveItem($event)"
+      (download)="handleDownloadReceipt()"
+    />
+
+    <section class="preview-panel" aria-label="Receipt preview workspace">
+      <div class="preview-panel__header">
+        <p>Live Preview</p>
+        <span>Exported around 640px wide for crisp sharing</span>
+      </div>
+
+      <div class="preview-panel__stage">
+        <div #receiptPreview>
+          <app-receipt-preview [receiptData]="receiptData()" />
+        </div>
+      </div>
+    </section>
+  </section>
+</main>
