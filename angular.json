@@ -40,6 +40,7 @@
             ],
             "styles": [
               "node_modules/@fontsource/patrick-hand/index.css",
+              "node_modules/@fontsource/ma-shan-zheng/chinese-simplified-400.css",
               "src/styles.scss"
             ]
           },
@@ -58,6 +59,9 @@
                 }
               ],
               "outputHashing": "all"
+            },
+            "github-pages": {
+              "baseHref": "/caviar-receipts/"
             },
             "development": {
               "optimization": false,
