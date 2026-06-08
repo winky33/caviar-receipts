@@ -33,7 +33,7 @@ export class ReceiptPreviewComponent {
   protected readonly discount = computed(() =>
     this.receiptData().discount,
   );
-  protected readonly total = computed(() => this.subtotal() - ((this.discount() || 0) /100));
+  protected readonly total = computed(() => this.subtotal() - (this.subtotal()*(this.discount()! /100)));
 
   protected formatCurrency(amount: number): string {
     return `RM${CURRENCY_FORMATTER.format(amount)}`;
