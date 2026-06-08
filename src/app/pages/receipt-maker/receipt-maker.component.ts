@@ -39,6 +39,7 @@ type ReceiptMakerForm = FormGroup<{
   time: FormControl<string>;
   footerMessage: FormControl<string>;
   items: FormArray<ReceiptItemFormGroup>;
+  discount: FormControl<number |null>;
 }>;
 
 type ReceiptMakerFormValue = {
@@ -47,6 +48,7 @@ type ReceiptMakerFormValue = {
   time: string;
   footerMessage: string;
   items: Array<ReceiptItem>;
+  discount: number;
 };
 
 @Component({
@@ -65,7 +67,7 @@ export class ReceiptMakerComponent {
   private readonly formBuilder = inject(FormBuilder);
   private readonly exportService = inject(ReceiptExportService);
 
-  protected readonly form: ReceiptMakerForm = this.formBuilder.nonNullable.group({
+  protected readonly form: ReceiptMakerForm = this.formBuilder.group({
     receiptNo: this.formBuilder.nonNullable.control(createReceiptNumber(), [
       Validators.required,
       Validators.maxLength(20),
@@ -74,7 +76,9 @@ export class ReceiptMakerComponent {
     time: this.formBuilder.nonNullable.control(this.getCurrentTime()),
     footerMessage: this.formBuilder.nonNullable.control(DEFAULT_FOOTER_MESSAGE),
     items: this.formBuilder.array([this.createItemGroup()]),
+    discount: this.formBuilder.control<number | null>(null)
   });
+
   protected readonly previewMode = signal<PreviewMode>('item-list');
   protected readonly receiptPreviewElement =
     viewChild.required<ElementRef<HTMLElement>>('receiptPreview');
@@ -125,11 +129,12 @@ export class ReceiptMakerComponent {
         }))
         .filter((item) => item.name.length > 0),
       footerMessage: value.footerMessage.trim() || DEFAULT_FOOTER_MESSAGE,
+      discount: value.discount || 0,
     };
   }
 
   private createItemGroup(initialValue: Partial<ReceiptItem> = {}): ReceiptItemFormGroup {
-    return this.formBuilder.nonNullable.group({
+    return this.formBuilder.group({
       name: this.formBuilder.nonNullable.control(initialValue.name ?? 'Anime Nail', [
         Validators.required,
         Validators.maxLength(100),

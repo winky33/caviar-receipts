@@ -50,6 +50,13 @@
         <span>{{ formatCurrency(subtotal()) }}</span>
       </div>
 
+      @if (discount() && discount()! > 0) {
+        <div class="receipt-paper__summary-row">
+          <span>Discount</span>
+          <span>- {{ discount() }}%</span>
+        </div>
+      }
+
       <div class="receipt-paper__summary-row">
         <span>Total Qty</span>
         <span>{{ totalQty() }}</span>

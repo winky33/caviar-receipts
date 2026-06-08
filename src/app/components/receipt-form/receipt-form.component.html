@@ -54,6 +54,15 @@
     </section>
 
     <label class="field">
+      <span class="field__label">Discount</span>
+
+      <div class="input-with-suffix">
+        <input type="number" formControlName="discount" name="discount" data-testid="receipt-discount"/>
+        <span class="suffix">%</span>
+      </div>
+    </label>
+
+    <label class="field">
       <span class="field__label">Footer Message</span>
       <textarea
         rows="6"

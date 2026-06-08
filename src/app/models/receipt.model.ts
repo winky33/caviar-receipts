@@ -5,4 +5,5 @@ export interface ReceiptData {
   dateTime: string;
   items: ReceiptItem[];
   footerMessage: string;
+  discount?: number;
 }
