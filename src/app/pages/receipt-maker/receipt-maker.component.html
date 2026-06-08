@@ -16,6 +16,13 @@
     />
 
     <section class="preview-panel" aria-label="Receipt preview workspace">
+      <div class="preview-panel__modes">
+        <app-preview-mode-toggle
+          [mode]="previewMode()"
+          (modeChange)="handlePreviewModeChange($event)"
+        />
+      </div>
+
       <div class="preview-panel__header">
         <p>Live Preview</p>
         <span>Exported around 640px wide for crisp sharing</span>
@@ -23,7 +30,7 @@
 
       <div class="preview-panel__stage">
         <div #receiptPreview>
-          <app-receipt-preview [receiptData]="receiptData()" />
+          <app-receipt-preview [receiptData]="receiptData()" [mode]="previewMode()" />
         </div>
       </div>
     </section>

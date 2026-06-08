@@ -3,6 +3,18 @@ import { describe, expect, it } from 'vitest';
 
 import { ReceiptPreviewComponent } from './receipt-preview.component';
 
+function buildReceiptData() {
+  return {
+    receiptNo: 'NO.0001',
+    dateTime: '2026/06/08 (Mon) 11:38',
+    items: [
+      { name: 'Anime Nail', qty: 1, amount: 120 },
+      { name: 'Gel Removal', qty: 1, amount: 20 },
+    ],
+    footerMessage: 'THANK YOU FOR YOUR PURCHASE\n\nTAG ME ON YOUR INSTAGRAM POST/STORY',
+  };
+}
+
 describe('ReceiptPreviewComponent', () => {
   it('uses a dedicated Ma Shan Zheng font hook for the Han labels in the preview', async () => {
     await TestBed.configureTestingModule({
@@ -11,12 +23,8 @@ describe('ReceiptPreviewComponent', () => {
 
     const fixture = TestBed.createComponent(ReceiptPreviewComponent);
 
-    fixture.componentRef.setInput('receiptData', {
-      receiptNo: 'NO.0001',
-      dateTime: '2026/06/08 (Mon) 11:38',
-      items: [{ name: 'Anime Nail', qty: 1 }],
-      footerMessage: 'THANK YOU',
-    });
+    fixture.componentRef.setInput('mode', 'item-list');
+    fixture.componentRef.setInput('receiptData', buildReceiptData());
     fixture.detectChanges();
     await fixture.whenStable();
 
@@ -29,5 +37,27 @@ describe('ReceiptPreviewComponent', () => {
     expect(hanLabels).toEqual(['\u54c1\u5355', '\u54c1\u540d', '\u6570\u91cf']);
     expect(styles).toContain('.receipt-paper__han');
     expect(styles).toContain('"Ma Shan Zheng"');
+  });
+
+  it('renders the cashier summary in receipt mode and hides the instagram section', async () => {
+    await TestBed.configureTestingModule({
+      imports: [ReceiptPreviewComponent],
+    }).compileComponents();
+
+    const fixture = TestBed.createComponent(ReceiptPreviewComponent);
+
+    fixture.componentRef.setInput('mode', 'receipt');
+    fixture.componentRef.setInput('receiptData', buildReceiptData());
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const text = compiled.textContent ?? '';
+
+    expect(text).toContain('Subtotal');
+    expect(text).toContain('Total Qty');
+    expect(text).toContain('TOTAL');
+    expect(text).toContain('RM140.00');
+    expect(text).not.toContain('@caviarnailgallery');
   });
 });

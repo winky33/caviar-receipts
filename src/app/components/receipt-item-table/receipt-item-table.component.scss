@@ -5,7 +5,7 @@
 
 .item-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 6rem auto;
+  grid-template-columns: minmax(0, 1fr) 6rem 8.5rem auto;
   gap: 0.75rem;
   align-items: end;
   padding: 0.85rem;
@@ -25,10 +25,16 @@
 
 .item-field input {
   width: 100%;
+  min-width: 0;
   border: 1px solid rgba(57, 41, 32, 0.16);
   border-radius: 0.95rem;
   padding: 0.7rem 0.85rem;
   background: #fff;
+}
+
+.item-field--qty,
+.item-field--amount {
+  min-width: 0;
 }
 
 .remove-button {
@@ -50,7 +56,8 @@
     grid-template-columns: 1fr;
   }
 
-  .item-field--qty {
+  .item-field--qty,
+  .item-field--amount {
     max-width: 8rem;
   }
 }

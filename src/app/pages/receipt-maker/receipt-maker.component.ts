@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, computed, inject, viewChild } from '@angular/core';
+import { Component, ElementRef, computed, inject, signal, viewChild } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
   FormArray,
@@ -11,8 +11,10 @@ import {
 } from '@angular/forms';
 import { map, startWith } from 'rxjs';
 
+import { PreviewModeToggleComponent } from '../../components/preview-mode-toggle/preview-mode-toggle.component';
 import { ReceiptFormComponent } from '../../components/receipt-form/receipt-form.component';
 import { ReceiptPreviewComponent } from '../../components/receipt-preview/receipt-preview.component';
+import { PreviewMode } from '../../models/preview-mode.model';
 import { ReceiptItem } from '../../models/receipt-item.model';
 import { ReceiptData } from '../../models/receipt.model';
 import { ReceiptExportService } from '../../services/receipt-export.service';
@@ -28,6 +30,7 @@ TO GET A 5% OFF ON YOUR NEXT PURCHASE`;
 type ReceiptItemFormGroup = FormGroup<{
   name: FormControl<string>;
   qty: FormControl<number>;
+  amount: FormControl<number>;
 }>;
 
 type ReceiptMakerForm = FormGroup<{
@@ -48,7 +51,13 @@ type ReceiptMakerFormValue = {
 
 @Component({
   selector: 'app-receipt-maker',
-  imports: [CommonModule, ReactiveFormsModule, ReceiptFormComponent, ReceiptPreviewComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    PreviewModeToggleComponent,
+    ReceiptFormComponent,
+    ReceiptPreviewComponent,
+  ],
   templateUrl: './receipt-maker.component.html',
   styleUrl: './receipt-maker.component.scss',
 })
@@ -66,6 +75,7 @@ export class ReceiptMakerComponent {
     footerMessage: this.formBuilder.nonNullable.control(DEFAULT_FOOTER_MESSAGE),
     items: this.formBuilder.array([this.createItemGroup()]),
   });
+  protected readonly previewMode = signal<PreviewMode>('item-list');
   protected readonly receiptPreviewElement =
     viewChild.required<ElementRef<HTMLElement>>('receiptPreview');
   protected readonly receiptData = computed<ReceiptData>(() => this.buildReceiptData(this.formValue()));
@@ -81,7 +91,7 @@ export class ReceiptMakerComponent {
   );
 
   protected handleAddItem(): void {
-    this.form.controls.items.push(this.createItemGroup({ name: '', qty: 1 }));
+    this.form.controls.items.push(this.createItemGroup({ name: '', qty: 1, amount: 0 }));
   }
 
   protected handleRemoveItem(index: number): void {
@@ -92,10 +102,14 @@ export class ReceiptMakerComponent {
     this.form.controls.items.removeAt(index);
   }
 
+  protected handlePreviewModeChange(mode: PreviewMode): void {
+    this.previewMode.set(mode);
+  }
+
   protected async handleDownloadReceipt(): Promise<void> {
     await this.exportService.exportAsPng(
       this.receiptPreviewElement().nativeElement,
-      buildReceiptFileName(this.form.controls.receiptNo.getRawValue()),
+      buildReceiptFileName(this.form.controls.receiptNo.getRawValue(), this.previewMode()),
     );
   }
 
@@ -107,6 +121,7 @@ export class ReceiptMakerComponent {
         .map((item) => ({
           name: item.name.trim(),
           qty: Number(item.qty) || 1,
+          amount: this.normalizeAmount(item.amount),
         }))
         .filter((item) => item.name.length > 0),
       footerMessage: value.footerMessage.trim() || DEFAULT_FOOTER_MESSAGE,
@@ -123,7 +138,22 @@ export class ReceiptMakerComponent {
         Validators.required,
         Validators.min(1),
       ]),
+      amount: this.formBuilder.nonNullable.control(initialValue.amount ?? 120, [
+        Validators.required,
+        Validators.min(0),
+        Validators.max(99999.99),
+      ]),
     });
+  }
+
+  private normalizeAmount(amount: number): number {
+    const safeAmount = Number(amount);
+
+    if (!Number.isFinite(safeAmount) || safeAmount < 0) {
+      return 0;
+    }
+
+    return Math.round(safeAmount * 100) / 100;
   }
 
   private formatReceiptDateTime(date: string, time: string): string {

@@ -49,6 +49,10 @@ h1 {
   overflow: hidden;
 }
 
+.preview-panel__modes {
+  padding: 1rem 1rem 0;
+}
+
 .preview-panel__header {
   display: flex;
   justify-content: space-between;
@@ -75,6 +79,13 @@ h1 {
   background:
     radial-gradient(circle at top, rgba(255, 223, 229, 0.45), transparent 45%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.5), rgba(244, 234, 224, 0.65));
+}
+
+@media (max-width: 560px) {
+  .preview-panel__header {
+    align-items: start;
+    flex-direction: column;
+  }
 }
 
 @media (min-width: 920px) {

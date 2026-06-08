@@ -14,20 +14,26 @@
     <div class="receipt-form__grid">
       <label class="field field--wide">
         <span class="field__label">Receipt Number</span>
-        <input type="text" formControlName="receiptNo" maxlength="20" data-testid="receipt-no" />
+        <input
+          type="text"
+          formControlName="receiptNo"
+          name="receiptNo"
+          maxlength="20"
+          data-testid="receipt-no"
+        />
       </label>
 
       <label class="field field--temporal">
         <span class="field__label">Date</span>
         <span class="field__control">
-          <input type="date" formControlName="date" data-testid="receipt-date" />
+          <input type="date" formControlName="date" name="receiptDate" data-testid="receipt-date" />
         </span>
       </label>
 
       <label class="field field--temporal">
         <span class="field__label">Time</span>
         <span class="field__control">
-          <input type="time" formControlName="time" data-testid="receipt-time" />
+          <input type="time" formControlName="time" name="receiptTime" data-testid="receipt-time" />
         </span>
       </label>
     </div>
@@ -49,7 +55,12 @@
 
     <label class="field">
       <span class="field__label">Footer Message</span>
-      <textarea rows="6" formControlName="footerMessage" data-testid="footer-message"></textarea>
+      <textarea
+        rows="6"
+        formControlName="footerMessage"
+        name="footerMessage"
+        data-testid="footer-message"
+      ></textarea>
     </label>
   </section>
 </form>

@@ -33,6 +33,8 @@ describe('ReceiptMakerComponent', () => {
     expect(compiled.textContent).toContain('Caviar Nail Gallery');
     expect(compiled.textContent).toContain('NO.0001');
     expect(compiled.textContent).toContain('THANK YOU FOR YOUR PURCHASE');
+    expect(compiled.textContent).toContain('Item List View');
+    expect(compiled.textContent).toContain('Receipt View');
     expect(compiled.querySelectorAll('[data-testid="item-row"]')).toHaveLength(1);
   });
 
@@ -69,9 +71,10 @@ describe('ReceiptMakerComponent', () => {
     );
     const itemNameInput = compiled.querySelector<HTMLInputElement>('[data-testid="item-name"]');
     const itemQtyInput = compiled.querySelector<HTMLInputElement>('[data-testid="item-qty"]');
+    const itemAmountInput = compiled.querySelector<HTMLInputElement>('[data-testid="item-amount"]');
     const footerMessageInput = compiled.querySelector<HTMLTextAreaElement>('[data-testid="footer-message"]');
 
-    if (!dateInput || !timeInput || !itemNameInput || !itemQtyInput || !footerMessageInput) {
+    if (!dateInput || !timeInput || !itemNameInput || !itemQtyInput || !itemAmountInput || !footerMessageInput) {
       throw new Error('Expected receipt form inputs to be present.');
     }
 
@@ -83,6 +86,8 @@ describe('ReceiptMakerComponent', () => {
     itemNameInput.dispatchEvent(new Event('input'));
     itemQtyInput.value = '2';
     itemQtyInput.dispatchEvent(new Event('input'));
+    itemAmountInput.value = '120';
+    itemAmountInput.dispatchEvent(new Event('input'));
     footerMessageInput.value = 'THANK YOU\\nCOME AGAIN';
     footerMessageInput.dispatchEvent(new Event('input'));
 
@@ -97,6 +102,31 @@ describe('ReceiptMakerComponent', () => {
     expect(preview?.textContent).toContain('COME AGAIN');
   });
 
+  it('switches to receipt view and shows receipt totals', async () => {
+    const fixture = TestBed.createComponent(ReceiptMakerComponent);
+
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const receiptModeButton = compiled.querySelector<HTMLButtonElement>('[data-testid="preview-mode-receipt"]');
+    const itemAmountInput = compiled.querySelector<HTMLInputElement>('[data-testid="item-amount"]');
+
+    if (!receiptModeButton || !itemAmountInput) {
+      throw new Error('Expected preview mode toggle and amount input to be present.');
+    }
+
+    itemAmountInput.value = '140';
+    itemAmountInput.dispatchEvent(new Event('input'));
+    receiptModeButton.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(compiled.textContent).toContain('Subtotal');
+    expect(compiled.textContent).toContain('Total Qty');
+    expect(compiled.textContent).toContain('RM140.00');
+  });
+
   it('exports the receipt preview with a sanitized filename', async () => {
     const fixture = TestBed.createComponent(ReceiptMakerComponent);
 
@@ -105,20 +135,22 @@ describe('ReceiptMakerComponent', () => {
 
     const compiled = fixture.nativeElement as HTMLElement;
     const receiptNumberInput = compiled.querySelector<HTMLInputElement>('[data-testid="receipt-no"]');
+    const receiptModeButton = compiled.querySelector<HTMLButtonElement>('[data-testid="preview-mode-receipt"]');
     const downloadButton = compiled.querySelector<HTMLButtonElement>('[data-testid="download-png"]');
 
-    if (!receiptNumberInput || !downloadButton) {
+    if (!receiptNumberInput || !receiptModeButton || !downloadButton) {
       throw new Error('Expected export controls to be present.');
     }
 
     receiptNumberInput.value = 'NO.0042';
     receiptNumberInput.dispatchEvent(new Event('input'));
+    receiptModeButton.click();
     fixture.detectChanges();
 
     downloadButton.click();
     await fixture.whenStable();
 
-    expect(exportAsPng).toHaveBeenCalledWith(expect.any(HTMLElement), 'receipt-NO0042.png');
+    expect(exportAsPng).toHaveBeenCalledWith(expect.any(HTMLElement), 'receipt-NO0042-payment.png');
   });
 
   it('does not force the preview stage to overflow its card on mobile', () => {

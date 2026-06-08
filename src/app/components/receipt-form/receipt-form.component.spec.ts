@@ -4,6 +4,22 @@ import { describe, expect, it } from 'vitest';
 
 import { ReceiptFormComponent } from './receipt-form.component';
 
+function buildForm(): FormGroup {
+  return new FormGroup({
+    receiptNo: new FormControl('NO.0001', { nonNullable: true }),
+    date: new FormControl('2026-06-08', { nonNullable: true }),
+    time: new FormControl('13:03', { nonNullable: true }),
+    footerMessage: new FormControl('THANK YOU', { nonNullable: true }),
+    items: new FormArray([
+      new FormGroup({
+        name: new FormControl('Anime Nail', { nonNullable: true }),
+        qty: new FormControl(1, { nonNullable: true }),
+        amount: new FormControl(120, { nonNullable: true }),
+      }),
+    ]),
+  });
+}
+
 describe('ReceiptFormComponent', () => {
   it('wraps temporal inputs in a Safari-safe control shell', async () => {
     await TestBed.configureTestingModule({
@@ -12,21 +28,7 @@ describe('ReceiptFormComponent', () => {
 
     const fixture = TestBed.createComponent(ReceiptFormComponent);
 
-    fixture.componentRef.setInput(
-      'form',
-      new FormGroup({
-        receiptNo: new FormControl('NO.0001', { nonNullable: true }),
-        date: new FormControl('2026-06-08', { nonNullable: true }),
-        time: new FormControl('13:03', { nonNullable: true }),
-        footerMessage: new FormControl('THANK YOU', { nonNullable: true }),
-        items: new FormArray([
-          new FormGroup({
-            name: new FormControl('Anime Nail', { nonNullable: true }),
-            qty: new FormControl(1, { nonNullable: true }),
-          }),
-        ]),
-      }),
-    );
+    fixture.componentRef.setInput('form', buildForm());
     fixture.detectChanges();
     await fixture.whenStable();
 
@@ -44,5 +46,23 @@ describe('ReceiptFormComponent', () => {
     expect(styles).toContain('input[type=time]');
     expect(styles).toContain('padding: 0;');
     expect(styles).toContain('min-width: 0;');
+  });
+
+  it('renders an amount input for each item row', async () => {
+    await TestBed.configureTestingModule({
+      imports: [ReceiptFormComponent],
+    }).compileComponents();
+
+    const fixture = TestBed.createComponent(ReceiptFormComponent);
+
+    fixture.componentRef.setInput('form', buildForm());
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const amountInput = compiled.querySelector<HTMLInputElement>('[data-testid="item-amount"]');
+
+    expect(amountInput).not.toBeNull();
+    expect(amountInput?.value).toBe('120');
   });
 });

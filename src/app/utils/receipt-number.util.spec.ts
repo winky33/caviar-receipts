@@ -12,6 +12,20 @@ describe('receipt number util', () => {
   });
 
   it('builds a download filename without punctuation from the receipt number', () => {
-    expect(buildReceiptFileName('NO.0027')).toBe('receipt-NO0027.png');
+    const buildModeFileName = buildReceiptFileName as unknown as (
+      receiptNumber: string,
+      mode: 'item-list' | 'receipt',
+    ) => string;
+
+    expect(buildModeFileName('NO.0027', 'item-list')).toBe('receipt-NO0027-item-list.png');
+  });
+
+  it('builds a payment filename for receipt view exports', () => {
+    const buildModeFileName = buildReceiptFileName as unknown as (
+      receiptNumber: string,
+      mode: 'item-list' | 'receipt',
+    ) => string;
+
+    expect(buildModeFileName('NO.0027', 'receipt')).toBe('receipt-NO0027-payment.png');
   });
 });

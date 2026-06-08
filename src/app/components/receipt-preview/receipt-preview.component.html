@@ -1,8 +1,19 @@
-<article class="receipt-paper" data-testid="receipt-preview" aria-label="Receipt preview">
-  <img class="receipt-paper__logo" src="assets/images/logo.jpeg" alt="Caviar Nail Gallery logo"/>
+<article
+  class="receipt-paper"
+  [class.receipt-paper--receipt]="mode() === 'receipt'"
+  data-testid="receipt-preview"
+  aria-label="Receipt preview"
+>
+  <img class="receipt-paper__logo" src="assets/images/logo.jpeg" alt="Caviar Nail Gallery logo" />
 
   <p class="receipt-paper__brand">Caviar Nail Gallery</p>
-  <p class="receipt-paper__title">[ Item List <span class="receipt-paper__han">品单</span> ]</p>
+  <p class="receipt-paper__title">
+    @if (mode() === 'receipt') {
+      [ Receipt <span class="receipt-paper__han">&#25910;&#25454;</span> ]
+    } @else {
+      [ Item List <span class="receipt-paper__han">&#21697;&#21333;</span> ]
+    }
+  </p>
 
   <div class="receipt-paper__meta">
     <span>{{ receiptData().dateTime }}</span>
@@ -11,30 +22,81 @@
 
   <div class="receipt-paper__divider"></div>
 
-  <div class="receipt-paper__table-header">
-    <span>Item(<span class="receipt-paper__han">品名</span>)</span>
-    <span>Qty(<span class="receipt-paper__han">数量</span>)</span>
-  </div>
+  @if (mode() === 'receipt') {
+    <div class="receipt-paper__table-header receipt-paper__table-header--receipt">
+      <span>Item(<span class="receipt-paper__han">&#21697;&#21517;</span>)</span>
+      <span>Qty(<span class="receipt-paper__han">&#25968;&#37327;</span>)</span>
+      <span>RM</span>
+    </div>
 
-  <div class="receipt-paper__items">
-    @for (item of receiptData().items; track item.name + $index) {
-      <div class="receipt-paper__item">
-        <span><img src="assets/images/bullet.jpeg" alt="Caviar Nail Gallery logo" width="20" height="10"/> {{ item.name }}</span>
-        <span>{{ item.qty }}</span>
+    <div class="receipt-paper__items receipt-paper__items--receipt">
+      @for (item of receiptData().items; track item.name + $index) {
+        <div class="receipt-paper__item receipt-paper__item--receipt">
+          <span class="receipt-paper__item-name">
+            <img src="assets/images/bullet.jpeg" alt="Caviar Nail Gallery bullet" width="20" height="10" />
+            {{ item.name }}
+          </span>
+          <span>{{ item.qty }}</span>
+          <span>{{ formatAmountValue(item.amount) }}</span>
+        </div>
+      }
+    </div>
+
+    <div class="receipt-paper__divider"></div>
+
+    <div class="receipt-paper__summary">
+      <div class="receipt-paper__summary-row">
+        <span>Subtotal</span>
+        <span>{{ formatCurrency(subtotal()) }}</span>
       </div>
-    }
-  </div>
 
-  <div class="receipt-paper__divider"></div>
+      <div class="receipt-paper__summary-row">
+        <span>Total Qty</span>
+        <span>{{ totalQty() }}</span>
+      </div>
+    </div>
 
-  <div class="receipt-paper__qr">
-    <img src="assets/images/insta.jpeg" alt="Instagram QR" />
-    <p>@caviarnailgallery</p>
-  </div>
+    <div class="receipt-paper__divider"></div>
 
-  <div class="receipt-paper__footer">
-    @for (line of footerLines(); track line + $index) {
-      <p>{{ line }}</p>
-    }
-  </div>
+    <div class="receipt-paper__summary receipt-paper__summary--total">
+      <div class="receipt-paper__summary-row receipt-paper__summary-row--total">
+        <span>TOTAL</span>
+        <span>{{ formatCurrency(total()) }}</span>
+      </div>
+    </div>
+
+    <div class="receipt-paper__divider"></div>
+
+    <p class="receipt-paper__receipt-footer">{{ receiptFooterLine() }}</p>
+  } @else {
+    <div class="receipt-paper__table-header">
+      <span>Item(<span class="receipt-paper__han">&#21697;&#21517;</span>)</span>
+      <span>Qty(<span class="receipt-paper__han">&#25968;&#37327;</span>)</span>
+    </div>
+
+    <div class="receipt-paper__items">
+      @for (item of receiptData().items; track item.name + $index) {
+        <div class="receipt-paper__item">
+          <span class="receipt-paper__item-name">
+            <img src="assets/images/bullet.jpeg" alt="Caviar Nail Gallery bullet" width="20" height="10" />
+            {{ item.name }}
+          </span>
+          <span>{{ item.qty }}</span>
+        </div>
+      }
+    </div>
+
+    <div class="receipt-paper__divider"></div>
+
+    <div class="receipt-paper__qr">
+      <img src="assets/images/insta.jpeg" alt="Instagram QR" />
+      <p>@caviarnailgallery</p>
+    </div>
+
+    <div class="receipt-paper__footer">
+      @for (line of footerLines(); track line + $index) {
+        <p>{{ line }}</p>
+      }
+    </div>
+  }
 </article>
