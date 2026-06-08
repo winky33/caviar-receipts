@@ -49,17 +49,20 @@ h3 {
 .field {
   display: grid;
   gap: 0.45rem;
+  min-width: 0;
   color: var(--muted-ink);
 }
 
-.field span {
+.field__label {
   color: var(--ink);
   font-size: 1rem;
 }
 
-.field input,
-.field textarea {
+.field input:not([type='date']):not([type='time']),
+.field textarea,
+.field__control {
   width: 100%;
+  min-width: 0;
   border: 1px solid rgba(57, 41, 32, 0.16);
   border-radius: 1rem;
   padding: 0.8rem 0.95rem;
@@ -68,16 +71,41 @@ h3 {
   transition: border-color 120ms ease, box-shadow 120ms ease;
 }
 
+.field__control {
+  display: block;
+}
+
+.field--temporal input[type='date'],
+.field--temporal input[type='time'] {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--ink);
+}
+
 .field textarea {
   min-height: 9rem;
   resize: vertical;
 }
 
-.field input:focus,
+.field input:not([type='date']):not([type='time']):focus,
 .field textarea:focus {
   outline: none;
   border-color: rgba(209, 94, 121, 0.6);
   box-shadow: 0 0 0 3px rgba(255, 204, 214, 0.6);
+}
+
+.field--temporal:focus-within .field__control {
+  border-color: rgba(209, 94, 121, 0.6);
+  box-shadow: 0 0 0 3px rgba(255, 204, 214, 0.6);
+}
+
+.field--temporal input[type='date']:focus,
+.field--temporal input[type='time']:focus {
+  outline: none;
 }
 
 .button {

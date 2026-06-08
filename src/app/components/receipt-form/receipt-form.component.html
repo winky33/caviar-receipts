@@ -13,18 +13,22 @@
 
     <div class="receipt-form__grid">
       <label class="field field--wide">
-        <span>Receipt Number</span>
+        <span class="field__label">Receipt Number</span>
         <input type="text" formControlName="receiptNo" maxlength="20" data-testid="receipt-no" />
       </label>
 
-      <label class="field">
-        <span>Date</span>
-        <input type="date" formControlName="date" data-testid="receipt-date" />
+      <label class="field field--temporal">
+        <span class="field__label">Date</span>
+        <span class="field__control">
+          <input type="date" formControlName="date" data-testid="receipt-date" />
+        </span>
       </label>
 
-      <label class="field">
-        <span>Time</span>
-        <input type="time" formControlName="time" data-testid="receipt-time" />
+      <label class="field field--temporal">
+        <span class="field__label">Time</span>
+        <span class="field__control">
+          <input type="time" formControlName="time" data-testid="receipt-time" />
+        </span>
       </label>
     </div>
 
@@ -44,7 +48,7 @@
     </section>
 
     <label class="field">
-      <span>Footer Message</span>
+      <span class="field__label">Footer Message</span>
       <textarea rows="6" formControlName="footerMessage" data-testid="footer-message"></textarea>
     </label>
   </section>
